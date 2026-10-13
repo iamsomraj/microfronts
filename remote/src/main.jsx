@@ -1,10 +1,10 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import Header from './components/Header.jsx';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+const App = () => {
+  const [count, setCount] = useState(0);
+  return <Header count={count} onAdd={() => setCount(count + 1)} />;
+};
+
+createRoot(document.getElementById('root')).render(<App />);
