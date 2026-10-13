@@ -1,22 +1,29 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import federation from '@originjs/vite-plugin-federation';
+import { federation } from '@module-federation/vite';
 
-export default defineConfig({
-  plugins: [
-    vue(),
-    federation({
-      name: 'host_app',
-      remotes: {
-        remote_app: 'http://localhost:5001/assets/remoteEntry.js',
-      },
-      shared: ['react', 'react-dom', 'vue'],
-    }),
-  ],
-  build: {
-    modulePreload: false,
-    target: 'esnext',
-    minify: false,
-    cssCodeSplit: false,
-  },
+export default defineConfig(({ mode }) => {
+  const { VITE_REMOTE_URL = 'http://localhost:3001' } = loadEnv(mode, process.cwd());
+
+  return {
+    plugins: [
+      vue(),
+      federation({
+        name: 'host_app',
+        dts: false,
+        remotes: {
+          remote_app: {
+            type: 'module',
+            name: 'remote_app',
+            entry: `${VITE_REMOTE_URL}/remoteEntry.js`,
+          },
+        },
+        shared: {
+          react: { singleton: true },
+          'react-dom': { singleton: true },
+        },
+      }),
+    ],
+    build: { target: 'esnext' },
+  };
 });

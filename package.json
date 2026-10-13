@@ -1,0 +1,14 @@
+{
+  "name": "microfronts",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.9.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel -r dev",
+    "build": "pnpm -r build",
+    "preview": "pnpm --parallel -r preview"
+  }
+}
